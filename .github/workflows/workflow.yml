@@ -25,8 +25,7 @@ jobs:
         uses: dltkdgns00/BOJ-action@main
         with:
           path: not_filled_files.txt
-          user_id: b_backyard
-          language_id: 1003
+          user_id: dangdang_ant
       - name: remove not_filled_files.txt
         run: rm not_filled_files.txt
       - name: Commit and push changes
