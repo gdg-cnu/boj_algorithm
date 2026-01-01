@@ -1,49 +1,49 @@
-
+import sys
+input = sys.stdin.readline
+write = sys.stdout.write
 
 m = int(input())
 
-S = []
+S = 0  # 비트마스크로 집합 표현 (1~20)
+
 def add(x):
-  S.append(x)
+    global S
+    S |= (1 << x)
 
 def remove(x):
-  if x in S:
-    S.remove(x)
+    global S
+    S &= ~(1 << x)
 
 def check(x):
-  if x in S:
-    return 1
-  else:
-    return 0
+    return 1 if (S & (1 << x)) else 0
 
 def toggle(x):
-  if x in S:
-    S.remove(x)
-  else:
-    S.append(x)
+    global S
+    S ^= (1 << x)
 
-def all():
-  S = list(range(1, 20))
+def all_set():
+    global S
+    S = (1 << 21) - 2   # 1~20 비트만 1
 
 def empty():
-  S = []
+    global S
+    S = 0
 
-output = []
+# 명령 → 함수 매핑
+commands = {
+    "add": add,
+    "remove": remove,
+    "check": check,
+    "toggle": toggle,
+    "all": all_set,
+    "empty": empty
+}
 
 for _ in range(m):
-  command = []
-  command = list(map(str, input().split()))
-  if command[0] == "add":
-    add(int(command[1]))
-  elif command[0] == "remove":
-    remove(int(command[1]))
-  elif command[0] == "check":
-    output.append(check(int(command[1])))
-  elif command[0] == "toggle":
-    toggle(int(command[1]))
-  elif command[0] == "all":
-    all()
-  elif command[0] == "empty":
-    empty
-
-print("\n".join(map(str, output)))
+    cmd = input().split()
+    if len(cmd) == 2:
+        res = commands[cmd[0]](int(cmd[1]))
+        if res is not None:          # check인 경우만
+            write(str(res) + "\n")   # 즉시 출력 (메모리 절약)
+    else:
+        commands[cmd[0]]()
